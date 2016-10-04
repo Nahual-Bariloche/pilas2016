@@ -7,8 +7,6 @@ pilas = pilasengine.iniciar()
 
 pilas.reiniciar_si_cambia(__file__)
 
-vidas = 5
-
 
 def agregar_caja():
     caja = pilas.actores.Caja(x = random.randint(-300, 300), y = random.randint(0, 300))
@@ -16,7 +14,7 @@ def agregar_caja():
     
 def colisiona_con_bomba(actor, bomba):
     bomba.explotar()
-#    actor.eliminar()
+    actor.perder_vida()
 
 def agregar_bombas(actor):
     bombas = pilas.actores.Bomba()*5
@@ -27,6 +25,9 @@ mapa = pilas.actores.MapaTiled('plataformas.tmx', densidad=0,
 
 pilas.actores.vincular(Protagonista)
 protagonista = pilas.actores.Protagonista()
+
+puntaje = pilas.actores.Puntaje(texto='3', x=200, y=200)
+
    
 segundos = 3
 agregando_cajas = pilas.tareas.siempre(segundos, agregar_caja)

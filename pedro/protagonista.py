@@ -2,6 +2,8 @@ import pilasengine
 
 class Protagonista(pilasengine.actores.Actor):
 
+    vidas = 3
+
     def iniciar(self):
         self.imagen = "aceituna.png"
         self.figura = pilas.fisica.Circulo(self.x, self.y, 17,
@@ -43,3 +45,9 @@ class Protagonista(pilasengine.actores.Actor):
     def esta_pisando_el_suelo(self):
         return len(self.sensor_pies.figuras_en_contacto) > 0
 
+    def perder_vida(self):
+        self.vidas -= 1
+        puntaje.reducir()
+        if(self.vidas == 0):
+            self.eliminar()
+            pilas.actores.Texto('GAME OVER')
