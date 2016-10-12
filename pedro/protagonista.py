@@ -5,14 +5,15 @@ class Protagonista(pilasengine.actores.Actor):
     vidas = 3
 
     def iniciar(self):
+        self.puntaje = pilas.actores.Puntaje(texto=str(self.vidas), x=200, y=200)
         self.imagen = "aceituna.png"
-        self.figura = pilas.fisica.Circulo(self.x, self.y, 17,
+        self.figura = self.pilas.fisica.Circulo(self.x, self.y, 17,
             friccion=0, restitucion=0)
 
         self.figura.sin_rotacion = True
         self.figura.escala_de_gravedad = 2
 
-        self.sensor_pies = pilas.fisica.Rectangulo(self.x, self.y, 20, 5, sensor=True, dinamica=False)
+        self.sensor_pies = self.pilas.fisica.Rectangulo(self.x, self.y, 20, 5, sensor=True, dinamica=False)
 
     def actualizar(self):
         velocidad = 10
@@ -47,7 +48,7 @@ class Protagonista(pilasengine.actores.Actor):
 
     def perder_vida(self):
         self.vidas -= 1
-        puntaje.reducir()
+        self.puntaje.actualizar(str(self.vidas))
         if(self.vidas == 0):
             self.eliminar()
-            pilas.actores.Texto('GAME OVER')
+            self.pilas.actores.Texto('GAME OVER')
