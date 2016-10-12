@@ -37,6 +37,7 @@ class ActuadorDigital(object):
             arduino=_ArduinoPilas()
         self.arduino = arduino
         self.pin = pin
+        self.arduino.pinMode(self.pin, "OUTPUT")
       
     def enceder(self):
         self.arduino.digitalWrite(self.pin,"HIGH")
