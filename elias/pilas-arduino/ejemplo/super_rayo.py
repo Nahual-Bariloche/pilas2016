@@ -43,8 +43,6 @@ class NaveRayo(NaveRoja):
         if(self.super_rayo.esta_habilitado):
             self.carga_rayo.color_relleno = colores.verde
             self.carga_rayo.pintar_imagen()
-#        else:
-#            self.carga_rayo.color_relleno = colores.amarillo   
         if(self.super_rayo.disparado()):
             self.carga_rayo.color_relleno = colores.amarillo
             self.carga_rayo.pintar_imagen()
@@ -60,25 +58,38 @@ class SuperRayo(Actor):
     def iniciar(self):
         self.esta_habilitado = False
         self.tiempo_inhabilitacion = 600
-        self.boton = SensorDigital(pin=7)
-        self.luz_de_carga = ActuadorDigital(pin=3)
-        self.luz_de_listo = ActuadorDigital(pin=4)
+        self.boton = SensorDigital(pin=2)
+        self.luz_de_carga = ActuadorDigital(pin=10)
+        self.luz_de_carga2 = ActuadorDigital(pin=11)
+        self.luz_de_listo = ActuadorDigital(pin=9)
         self.x = 0
         self.y = 0
         self.imagen = "invisible.png"
         self.se_disparo_rayo = False
         self.luz_de_carga.enceder()
+        self.luz_de_carga2.enceder()
+        self.luz_de_listo.apagar()
+        self.tiempo_chequeo = 10
         
     def actualizar(self):
         if(self.tiempo_inhabilitacion > 1):
             self.tiempo_inhabilitacion-=1
         else:
-            self.luz_de_carga.apagar()
-            self.luz_de_listo.enceder()
-            self.esta_habilitado = True
+            if(self.esta_habilitado == False):
+                self.luz_de_carga.apagar()
+                self.luz_de_carga2.apagar()    
+                self.luz_de_listo.enceder()                
+                self.esta_habilitado = True
                     
-        if(self.esta_habilitado and self.boton.esta_encendido()):
+        if(self.esta_habilitado and self.esta_presionado()):
             self.se_disparo_rayo = True
+            
+    def esta_presionado(self):
+        self.tiempo_chequeo-=1
+        if(self.tiempo_chequeo<1):
+            self.tiempo_chequeo = 10
+            return self.boton.esta_encendido()                 
+        return 0
         
     def disparado(self):
         if(self.se_disparo_rayo):
@@ -86,6 +97,7 @@ class SuperRayo(Actor):
             self.tiempo_inhabilitacion = 600
             self.se_disparo_rayo = False
             self.luz_de_carga.enceder()
+            self.luz_de_carga2.enceder()
             self.luz_de_listo.apagar()
             return True
         else:
