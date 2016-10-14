@@ -2,11 +2,59 @@
 import pilasengine
 from arduino_pilas import SensorDigital, iniciar_arduino, ActuadorDigital
 from pilasengine.actores.actor import Actor
+from pilasengine.actores.nave_roja import NaveRoja
+from pilasengine import colores
 
 pilas = pilasengine.iniciar()
-
 puntaje = pilas.actores.Puntaje(-280, 200, color=pilas.colores.blanco)
 
+
+class NaveRayo(NaveRoja):
+    def iniciar(self, *k, **kw):
+        NaveRoja.iniciar(self, *k, **kw)
+        self.cantidad_de_carga = 10
+        self.demora_carga = 120
+        self.carga_rayo = self.pilas.actores.Energia(y=200)
+        self.carga_rayo.progreso = 100
+        self.super_rayo = SuperRayo(self.pilas)
+        
+    def intenta_disparar(self):
+        if(self.cantidad_de_carga>0):
+            super(NaveRayo,self).intenta_disparar()
+           
+    def crear_disparo(self):
+        NaveRoja.crear_disparo(self)
+        self.cantidad_de_carga-=1
+        self.carga_rayo.progreso -= 10
+            
+    def actualizar(self):
+        NaveRoja.actualizar(self)
+        if(self.demora_carga==0):
+            self.demora_carga=120
+            self.carga_rayo.progreso = 100
+            self.cantidad_de_carga = 10
+                    
+        if(self.cantidad_de_carga==0):
+            self.demora_carga-=1
+            
+        self.chequear_rayo()   
+    
+    def chequear_rayo(self):
+        if(self.super_rayo.esta_habilitado):
+            self.carga_rayo.color_relleno = colores.verde
+            self.carga_rayo.pintar_imagen()
+#        else:
+#            self.carga_rayo.color_relleno = colores.amarillo   
+        if(self.super_rayo.disparado()):
+            self.carga_rayo.color_relleno = colores.amarillo
+            self.carga_rayo.pintar_imagen()
+            explosion=pilas.actores.Explosion()
+            explosion.escala = 10            
+            for un_enemigo in enemigos:
+                un_enemigo.eliminar()
+                if self.cuando_elimina_enemigo:
+                    self.cuando_elimina_enemigo()                
+        
 class SuperRayo(Actor):
     
     def iniciar(self):
@@ -60,26 +108,18 @@ class AceitunaEnemiga(pilasengine.actores.Aceituna):
             self.eliminar()
 
 fondo = pilas.fondos.Galaxia(dy= -5)
-iniciar_arduino();
+arduino =iniciar_arduino();
 enemigos = pilas.actores.Grupo()
-rayo = SuperRayo(pilas)
 
 def crear_enemigo():
     actor = AceitunaEnemiga(pilas)
     enemigos.agregar(actor)    
-            
-def chequear_rayo():
-    if(rayo.disparado()):
-        for un_enemigo in enemigos:
-            un_enemigo.eliminar()
-
+           
 pilas.tareas.siempre(0.5, crear_enemigo)
-pilas.tareas.siempre(0.1, chequear_rayo)
 
-nave = pilas.actores.NaveRoja(y=-200)
+nave = NaveRayo(pilas,y=-200)
 nave.aprender(pilas.habilidades.LimitadoABordesDePantalla)
 nave.definir_enemigos(enemigos, puntaje.aumentar)
-
 pilas.colisiones.agregar(nave, enemigos, nave.eliminar)
 
 pilas.avisar(u"Pulsá los direccionales del teclado o espacio para disparar.")
