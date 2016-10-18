@@ -7,7 +7,7 @@ pilas = pilasengine.iniciar()
 
 pilas.reiniciar_si_cambia(__file__)
 
-vidas = 5
+# vidas = 5
 
 
 def agregar_caja():
@@ -17,6 +17,7 @@ def agregar_caja():
 def colisiona_con_bomba(actor, bomba):
     bomba.explotar()
 #    actor.eliminar()
+    actor.restar_vida()
 
 def agregar_bombas(actor):
     bombas = pilas.actores.Bomba()*5
@@ -31,6 +32,8 @@ protagonista = pilas.actores.Protagonista()
 segundos = 3
 agregando_cajas = pilas.tareas.siempre(segundos, agregar_caja)
 pilas.tareas.agregar(3, agregar_bombas, protagonista)
+
+puntaje=pilas.actores.Puntaje(texto="5",x=200, y=200)
 
 
 

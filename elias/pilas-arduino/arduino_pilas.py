@@ -37,12 +37,24 @@ class ActuadorDigital(object):
             arduino=_ArduinoPilas()
         self.arduino = arduino
         self.pin = pin
+        self.arduino.pinMode(self.pin, "OUTPUT")
       
     def enceder(self):
         self.arduino.digitalWrite(self.pin,"HIGH")
     
     def apagar(self):
         self.arduino.digitalWrite(self.pin,"LOW")
+        
+class SensorDigital(object):
+    def __init__(self,arduino=None, pin=13):
+        if arduino == None:
+            arduino=_ArduinoPilas()
+        self.arduino = arduino
+        self.pin = pin
+        self.arduino.pinMode(self.pin, "INPUT")
+        
+    def esta_encendido(self):
+        return self.arduino.digitalRead(self.pin)
 
 def iniciar_arduino(baud=9600, port=None):   
     return _ArduinoPilas(baud, port, init=True)

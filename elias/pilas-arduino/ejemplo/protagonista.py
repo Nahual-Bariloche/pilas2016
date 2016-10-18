@@ -1,10 +1,11 @@
 import pilasengine
-from arduino_pilas import ActuadorDigital 
+from arduino_pilas import ActuadorDigital , SensorDigital
 
 class Protagonista(pilasengine.actores.Actor):
 
     def iniciar(self):
-        self.luces = [ActuadorDigital(pin=1),ActuadorDigital(pin=2),ActuadorDigital(pin=3)]
+        self.boton = SensorDigital(pin=7)
+        self.luces = [ActuadorDigital(pin=3),ActuadorDigital(pin=4),ActuadorDigital(pin=5)]
         self.imagen = "aceituna.png"
         self.figura = self.pilas.fisica.Circulo(self.x, self.y, 17,
             friccion=0, restitucion=0)
@@ -22,7 +23,7 @@ class Protagonista(pilasengine.actores.Actor):
         salto = 15
         self.x = self.figura.x
         self.y = self.figura.y
-
+        
         if self.pilas.control.derecha:
             self.figura.velocidad_x = velocidad
             self.rotacion -= velocidad
@@ -33,7 +34,7 @@ class Protagonista(pilasengine.actores.Actor):
             self.figura.velocidad_x = 0
 
         if self.esta_pisando_el_suelo():
-            if self.pilas.control.arriba and int(self.figura.velocidad_y) <= 0:
+            if (self.pilas.control.arriba or self.boton.esta_encendido()) and int(self.figura.velocidad_y) <= 0:
                 self.figura.impulsar(0, salto)
 
         self.sensor_pies.x = self.x
