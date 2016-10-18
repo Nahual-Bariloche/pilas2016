@@ -2,10 +2,6 @@ import pilasengine
 import random
 import protagonista
 
-def colisiona_con_bomba(actor, bomba):
-    bomba.explotar()
-    actor.perder_vida()
-
 class Juego(pilasengine.escenas.Escena):
 
     def iniciar(self):
