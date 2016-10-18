@@ -13,7 +13,12 @@ def colisiona_con_bomba(actor, bomba):
 
 pilas.escenas.vincular(Inicio)
 
-pilas.escenas.Inicio()
+inicio = pilas.escenas.Inicio()
+
+def llega_a_puerta(actor, puerta):
+    pilas.actores.Texto('Felicitaciones, pasaste de nivel')
+    inicio.juego.pasar_nivel()
+
 
 
 pilas.ejecutar()

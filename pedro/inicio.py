@@ -18,7 +18,7 @@ class Inicio(pilasengine.escenas.Escena):
 
     def iniciar_juego(self):
         self.pilas.escenas.vincular(Juego)
-        self.pilas.escenas.Juego()
+        self.juego = self.pilas.escenas.Juego()
 
     def salir_del_juego(self):
         print("Adios...")
