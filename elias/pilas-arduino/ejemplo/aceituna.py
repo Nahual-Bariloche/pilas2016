@@ -1,7 +1,9 @@
 import pilasengine
 import random
 from protagonista import Protagonista
-import arduino_pilas
+from pilas_arduino import arduino_pilas
+
+# python -m ejemplo.aceituna
 
 pilas = pilasengine.iniciar()
 

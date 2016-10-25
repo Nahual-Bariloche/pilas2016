@@ -1,9 +1,10 @@
 # -*- coding: utf-8
 import pilasengine
-from arduino_pilas import SensorDigital, iniciar_arduino, ActuadorDigital
 from pilasengine.actores.actor import Actor
 from pilasengine.actores.nave_roja import NaveRoja
 from pilasengine import colores
+from pilas_arduino.arduino_pilas import SensorDigital, ActuadorDigital,\
+    iniciar_arduino
 
 pilas = pilasengine.iniciar()
 puntaje = pilas.actores.Puntaje(-280, 200, color=pilas.colores.blanco)

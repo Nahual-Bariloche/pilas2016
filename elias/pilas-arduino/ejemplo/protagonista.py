@@ -1,11 +1,11 @@
 import pilasengine
-from arduino_pilas import ActuadorDigital , SensorDigital
+from pilas_arduino.arduino_pilas import SensorDigital, ActuadorDigital
 
 class Protagonista(pilasengine.actores.Actor):
 
     def iniciar(self):
-        self.boton = SensorDigital(pin=7)
-        self.luces = [ActuadorDigital(pin=3),ActuadorDigital(pin=4),ActuadorDigital(pin=5)]
+        self.boton = SensorDigital(pin=2)
+        self.luces = [ActuadorDigital(pin=9),ActuadorDigital(pin=10),ActuadorDigital(pin=11)]
         self.imagen = "aceituna.png"
         self.figura = self.pilas.fisica.Circulo(self.x, self.y, 17,
             friccion=0, restitucion=0)
